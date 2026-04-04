@@ -29,7 +29,6 @@ interface CalculateExpensesProps {
   log: LogEntry[]; // The state
   setLog: React.Dispatch<React.SetStateAction<LogEntry[]>>; // The setter
 }
-
 export default function CalculateExpenses({
   modalCalExpensesVisible,
   setModalCalExpensesVisible,
