@@ -36,13 +36,11 @@ export default function BudgetApp() {
     return (
       <SafeAreaView style={{ flex: 1, backgroundColor: colors.bgPrimary, alignItems: 'center', justifyContent: 'center' }}>
         <View style={{ alignItems: 'center' }}>
-          <View style={{
-            width: 64, height: 64, borderRadius: 24,
-            backgroundColor: colors.accent,
-            alignItems: 'center', justifyContent: 'center', marginBottom: 16
-          }}>
-            <Text style={{ fontSize: 30, fontWeight: 'bold', color: '#FFFFFF' }}>₱</Text>
-          </View>
+          <Image 
+            source={require('../assets/Spenda_logo.png')} 
+            style={{ width: 120, height: 120, marginBottom: 24 }} 
+            resizeMode="contain"
+          />
           <ActivityIndicator size="large" color={colors.accent} />
         </View>
       </SafeAreaView>

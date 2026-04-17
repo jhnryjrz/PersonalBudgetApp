@@ -60,7 +60,7 @@ If you want Google login:
 ## Step 6: Run the App
 
 ```bash
-cd myApp
+cd Spenda
 npx expo start
 ```
 

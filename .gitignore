@@ -10,8 +10,15 @@ npm-debug.*
 *.orig.*
 web-build/
 
+# Local env files
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
 
-
+# Do NOT ignore the template file
+!.env.example
 
 ios
 android
