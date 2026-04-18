@@ -2,33 +2,34 @@
   "expo": {
     "name": "Spenda",
     "slug": "spenda",
+    "scheme": "spenda",
     "version": "1.0.0",
-
     "web": {
       "favicon": "./assets/favicon.png"
     },
-
     "experiments": {
       "tsconfigPaths": true
     },
-
-    "plugins": [],
-
+    "plugins": [
+      "expo-web-browser"
+    ],
     "orientation": "portrait",
     "icon": "./assets/Spenda_logo.png",
-
     "userInterfaceStyle": "light",
-
     "splash": {
       "image": "./assets/Spenda_logo.png",
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
-    "assetBundlePatterns": ["**/*"],
+    "assetBundlePatterns": [
+      "**/*"
+    ],
     "ios": {
+      "bundleIdentifier": "com.yerhnoj.spenda",
       "supportsTablet": true
     },
     "android": {
+      "bundleIdentifier": "com.yerhnoj.spenda",
       "adaptiveIcon": {
         "foregroundImage": "./assets/Spenda_logo.png",
         "backgroundColor": "#ffffff"

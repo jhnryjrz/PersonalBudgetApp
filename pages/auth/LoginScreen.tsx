@@ -14,6 +14,8 @@ import {
 import { useState } from 'react';
 import { supabase } from 'lib/supabase';
 import { useTheme } from 'lib/ThemeContext';
+import * as Linking from 'expo-linking';
+import * as WebBrowser from 'expo-web-browser';
 
 interface LoginScreenProps {
   onNavigateToSignup: () => void;
@@ -38,9 +40,40 @@ export default function LoginScreen({ onNavigateToSignup }: LoginScreenProps) {
 
   const handleGoogleLogin = async () => {
     setLoading(true);
-    const { error } = await supabase.auth.signInWithOAuth({ provider: 'google' });
-    if (error) Alert.alert('Google Login Failed', error.message);
-    setLoading(false);
+    try {
+      const redirectTo = Linking.createURL('auth-callback');
+      const { data, error } = await supabase.auth.signInWithOAuth({
+        provider: 'google',
+        options: {
+          redirectTo,
+          skipBrowserRedirect: true,
+          queryParams: {
+            prompt: 'select_account',
+          },
+        },
+      });
+      if (error) {
+        Alert.alert('Google Login Failed', error.message);
+        return;
+      }
+      if (data?.url) {
+        const result = await WebBrowser.openAuthSessionAsync(data.url, redirectTo);
+        if (result.type === 'success' && result.url) {
+          const url = new URL(result.url);
+          // Supabase may put tokens in the fragment (#) or query (?)
+          const params = new URLSearchParams(url.hash.substring(1) || url.search.substring(1));
+          const accessToken = params.get('access_token');
+          const refreshToken = params.get('refresh_token');
+          if (accessToken && refreshToken) {
+            await supabase.auth.setSession({ access_token: accessToken, refresh_token: refreshToken });
+          }
+        }
+      }
+    } catch (err: any) {
+      Alert.alert('Google Login Failed', err.message || 'Something went wrong');
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (

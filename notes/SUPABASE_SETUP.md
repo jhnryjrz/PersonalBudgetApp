@@ -43,17 +43,49 @@ This creates all the required tables:
 
 ---
 
-## Step 5: Enable Google Auth (Optional)
+## Step 5: Enable Google Auth (Detailed Guide)
 
-If you want Google login:
+To enable Google Sign-In for your app, follow these steps:
 
-1. In Supabase dashboard, go to **Authentication → Providers**.
-2. Enable **Google**.
-3. Follow the instructions to create a Google OAuth app in the [Google Cloud Console](https://console.cloud.google.com/).
-4. Add the Client ID and Secret to Supabase.
+### A. Get your Redirect URI from Supabase
+1. In your **Supabase Dashboard**, navigate to **Authentication → Providers → Google**.
+2. Find the **Callback URL (redirect URI)** at the bottom of the Google configuration section. Copy this; you'll need it for Google Cloud.
 
-> **Note:** For Expo Go / development, Google OAuth requires deep linking setup.
-> For a simpler setup, **email/password auth** works out of the box.
+### B. Setup Google Cloud Console
+1. Go to the [Google Cloud Console](https://console.cloud.google.com/).
+2. Create a **New Project** (or select an existing one).
+3. Navigate to **APIs & Services → OAuth consent screen**.
+    - Choose **External**.
+    - Fill in the required App Information (App name, User support email, Developer contact info).
+    - Save and continue through the scopes (default scopes are fine).
+4. Navigate to **APIs & Services → Credentials**.
+    - Click **+ Create Credentials** → **OAuth client ID**.
+    - Select **Web application** as the Application type (even for mobile apps, Supabase acts as the web handler).
+    - Under **Authorized redirect URIs**, click **+ ADD URI** and paste the **Callback URL** you copied from Supabase.
+    - Click **Create**.
+5. Copy the generated **Client ID** and **Client Secret**.
+
+### C. Configure Supabase
+1. Go back to your **Supabase Dashboard → Authentication → Providers → Google**.
+2. Enter your **Client ID** and **Client Secret**.
+3. Toggle "Enable Google" to **ON**.
+4. Click **Save**.
+
+### D. Handling Redirects in Expo (Critical)
+For Google Auth to return to your app after login:
+1. Ensure your `app.json` has a scheme (e.g., `"scheme": "spenda"`).
+2. Use the following code pattern for signing in:
+   ```typescript
+   import * as Linking from 'expo-linking';
+
+   const { data, error } = await supabase.auth.signInWithOAuth({
+     provider: 'google',
+     options: {
+       redirectTo: Linking.createURL('auth-callback')
+     }
+   });
+   ```
+
 
 ---
 
